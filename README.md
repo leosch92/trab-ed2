@@ -13,12 +13,17 @@ numa árvore B+.
 
 As informações referentes às folhas são as seguintes:
 
-- (A) Carga horária cursada com sucesso (CHCS);
-- (B) Carga horária total (CHT);
-- (C) Número máximo de períodos do currículo (NTOTPER);
-- (D) Número de períodos desde a entrada na universidade (NPU);
-- (E) CR, matrícula e número de trancamentos; e
-- (F) Tempo nominal do curso (TNC);
+A) Carga horária cursada com sucesso (CHCS);
+
+B) Carga horária total (CHT);
+
+C) Número máximo de períodos do currículo (NTOTPER);
+
+D) Número de períodos desde a entrada na universidade (NPU);
+
+E) CR, matrícula e número de trancamentos; e
+
+F) Tempo nominal do curso (TNC);
 
 Exemplos de currículos:
 
