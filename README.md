@@ -84,8 +84,9 @@ NOTAS IMPORTANTES PARA RETIRADA:
   
   ------------- FIM DO ENUNCIADO ----------
   
--Funções faltando:
-	- Remove;
-	- Retirada dos formandos;
-	- Retirada dos alunos que chegaram ao tnc e não atingiram 50% do CHT;
-	- Retirada dos alunos que chegaram ao NTOTPER e não atingiram 100% do CHT.
+Funções faltando:
+
+- Remove;
+- Retirada dos formandos;
+- Retirada dos alunos que chegaram ao tnc e não atingiram 50% do CHT;
+- Retirada dos alunos que chegaram ao NTOTPER e não atingiram 100% do CHT.
