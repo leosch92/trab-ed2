@@ -45,24 +45,22 @@ Exemplos de currículos:
 Implemente as seguintes operações:
 
 1) Manipulação em árvore B+:
-	- Inicializa;
-	- Libera;
-	- Imprime;
-	- Insere;
-	- Retira;
-	- Busca;
-	- Cria nó de árvore B+;
-	- Modifica CHCS;
-	- Altera CR;
-	- Modifica NPU;
-	- Altera número de trancamentos.
+- Inicializa;
+- Libera;
+- Imprime;
+- Insere;
+- Retira;
+- Busca;
+- Cria nó de árvore B+;
+- Modifica CHCS;
+- Altera CR;
+- Modifica NPU;
+- Altera número de trancamentos.
 
 2) Limpeza da árvore B+: (Uma operação para cada)
-	- Retirada dos formandos;
-	- Retirada dos alunos que chegaram ao tnc e não atingiram 50%
-	do CHT;
-	- Retirada dos alunos que chegaram ao NTOTPER e não atingiram
-	100% do CHT.
+- Retirada dos formandos;
+- Retirada dos alunos que chegaram ao tnc e não atingiram 50% do CHT;
+- Retirada dos alunos que chegaram ao NTOTPER e não atingiram 100% do CHT.
 
 Imprimir na retirada para ver o que está acontecendo.
 
