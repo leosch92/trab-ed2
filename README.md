@@ -28,19 +28,19 @@ F) Tempo nominal do curso (TNC);
 Exemplos de currículos:
 
 - Currículo 1:
-	2955h (CHT)
-	16 (NOTOTPER)
-	8 (TNC)
+	-2955h (CHT)
+	-16 (NOTOTPER)
+	-8 (TNC)
 
 - Currículo 2:
-	3524h
-	12
-	8
+	-3524h
+	-12
+	-8
 
 - Currículo 3:
-	3200h
-	12
-	8
+	-3200h
+	-12
+	-8
 
 Implemente as seguintes operações:
 
