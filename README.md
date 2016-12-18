@@ -89,7 +89,7 @@ NOTAS IMPORTANTES PARA RETIRADA:
   
 Funções faltando:
 
-- Remove;
+- Remove CASO 3B;
 - Retirada dos formandos;
 - Retirada dos alunos que chegaram ao tnc e não atingiram 50% do CHT;
 - Retirada dos alunos que chegaram ao NTOTPER e não atingiram 100% do CHT.
