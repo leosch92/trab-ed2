@@ -9,8 +9,8 @@ typedef struct arvbm{
     struct arvbm **filho, *prox;
 }TABM;
 
-//chcs = Carga horária cursada com sucesso; npu = Número de períodos desde a entrada
-//cht = Carga horária total; ntotper = Número total de períodos; tnc = Tempo nominal de curso
+//chcs = Carga horÃ¡ria cursada com sucesso; npu = NÃºmero de perÃ­odos desde a entrada
+//cht = Carga horÃ¡ria total; ntotper = NÃºmero total de perÃ­odos; tnc = Tempo nominal de curso
 typedef struct aluno{
     int mat, num_trancs, chcs, npu, cht, ntotper, tnc;
     float cr;
@@ -89,9 +89,9 @@ TABM *divisao(TABM *x, int i, TABM* y, int t){
         }
     }
     else {
-        z->nchaves = t; //z possuirá uma chave a mais que y se for folha
+        z->nchaves = t; //z possuirÃ¡ uma chave a mais que y se for folha
         for(j=0;j < t;j++){
-            z->chave[j] = y->chave[j+t-1];//Caso em que y é folha, temos q passar a info para o nó da direita
+            z->chave[j] = y->chave[j+t-1];//Caso em que y Ã© folha, temos q passar a info para o nÃ³ da direita
             z->aluno[j] = y->aluno[j+t-1];
         }
         y->prox = z;
@@ -105,7 +105,7 @@ TABM *divisao(TABM *x, int i, TABM* y, int t){
     return x;
 }
 
-//Teste para ver se o ponteiramento das folhas para outras folhas está correto
+//Teste para ver se o ponteiramento das folhas para outras folhas estÃ¡ correto
 void imprime_teste(TABM* a){
     TABM* aux = malloc(sizeof(TABM));
     aux = a;
@@ -237,7 +237,7 @@ TABM *le_arq_arvore(char* nm_arq, TABM* arv, int t){
     TAL* aluno = (TAL*)malloc(sizeof(TAL));
     r = fscanf(fp, "%d %f %d %d %d %d %30[^\n]", &aluno->mat, &aluno->cr, &aluno->num_trancs, &aluno->chcs, &aluno->npu,
                &num_cur, &aluno->nome);
-    while (r == 7) { //7 é o número de informações por linha no arquivo
+    while (r == 7) { //7 Ã© o nÃºmero de informaÃ§Ãµes por linha no arquivo
             aluno = le_curriculo(aluno, num_cur);
             arv = insere(arv, aluno, t);
             aluno = (TAL*)malloc(sizeof(TAL));
@@ -294,7 +294,7 @@ void copiaUm(TABM* arv, TABM* andar){
 void retiraAux(TABM* arv, int mat, int t, int imprime){
     int i;
     for(i = 0; i<arv->nchaves && arv->chave[i] <= mat; i++);  //Encontra primeiro i maior que chave
-    if(arv->folha){         //Achou elemento, já garantido que existe por retira()
+    if(arv->folha){         //Achou elemento, jÃ¡ garantido que existe por retira()
         if(imprime)printf("Caso 1\n");
         i--;
         printf("%d\n",mat);
@@ -309,11 +309,11 @@ void retiraAux(TABM* arv, int mat, int t, int imprime){
         TABM* filhoSuc = NULL, * filhoAnt = NULL;
         TABM * filhoCand = arv->filho[i];
         if(filhoCand->nchaves < t){                         //Filho candidato tem t-1 chaves
-            if(i != arv->nchaves){                           //Filho i não é o último
+            if(i != arv->nchaves){                           //Filho i nÃ£o Ã© o Ãºltimo
                 filhoSuc = arv->filho[i+1];
                 if(filhoSuc && filhoSuc->nchaves>= t){          //Tem filho sucessor que pode ceder um elemento
                     if(imprime)printf("Caso 3A\n");
-                    if(filhoSuc->folha){                        //Esse filho é folha
+                    if(filhoSuc->folha){                        //Esse filho Ã© folha
                         //Coloca primeiro elemento do Sucessor no candidato
                         arv->chave[i] = filhoSuc->chave[1];
                         filhoCand->chave[filhoCand->nchaves] = filhoSuc->chave[0];
@@ -330,7 +330,7 @@ void retiraAux(TABM* arv, int mat, int t, int imprime){
                     else{
                         //Chave do pai vai para filho Candidato
                         filhoCand->chave[filhoCand->nchaves] = arv->chave[i];
-                        //Primeiro filho do sucessor vira último filho do pai
+                        //Primeiro filho do sucessor vira Ãºltimo filho do pai
                         filhoCand->filho[filhoCand->nchaves+1] = filhoSuc->filho[0];
                         filhoCand->nchaves++;
                         //Chave do pai, se torna o menor elemento do sucesso
@@ -349,7 +349,7 @@ void retiraAux(TABM* arv, int mat, int t, int imprime){
 
                 }
             }
-            else if(i!= 0){                                //Filho i não é o primeiro
+            else if(i!= 0){                                //Filho i nÃ£o Ã© o primeiro
                 filhoAnt = arv->filho[i-1];
                 if(filhoAnt && filhoAnt->nchaves>= t){     //Tem filho antecessor que pode ceder um elemento
                     if(imprime)printf("Caso 3A\n");
@@ -390,7 +390,7 @@ void retiraAux(TABM* arv, int mat, int t, int imprime){
                 }
             }
             if(imprime)printf("Caso 3B\n");
-            if(filhoSuc){       //Existe filho sucessor, junção com ele
+            if(filhoSuc){       //Existe filho sucessor, junÃ§Ã£o com ele
                 if(filhoCand->folha){
                     //Caso 3B com Filho Sucessor, ambos folha
                     filhoCand->nchaves = 2*t-2 ;
@@ -432,7 +432,7 @@ void retiraAux(TABM* arv, int mat, int t, int imprime){
                 }
             }
             else{
-               //Não existe filho sucessor, junção será com antecessor
+               //NÃ£o existe filho sucessor, junÃ§Ã£o serÃ¡ com antecessor
                 if(filhoCand->folha){
                     //Caso 3B com Filho Antecessor, ambos folha
 
@@ -497,7 +497,7 @@ TLista* insere_inicio(TLista* l, int info){
 
 TLista* remove_prim(TLista* l, int* info){
     if(!l) return;
-    info = l->info;
+    *info = l->info;
     TLista* aux = l;
     aux = aux->prox;
     free(l);
@@ -603,7 +603,7 @@ int main(){
             printf("Insira a matricula do aluno a ser removido:\n");
             int mat_removida;
             scanf("%d", &mat_removida);
-            retira(arvore, mat_removida, t, 1); //Se 1, imprime os casos, 0 para não imprimir
+            retira(arvore, mat_removida, t, 1); //Se 1, imprime os casos, 0 para nÃ£o imprimir
             imprime(arvore, 0);
         }
         else if (num_op == 6){
