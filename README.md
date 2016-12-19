@@ -86,12 +86,5 @@ NOTAS IMPORTANTES PARA RETIRADA:
 	* Nó interno e folha: perco a informação do nó interno
   
   ------------- FIM DO ENUNCIADO ----------
-  
-Funções faltando:
-
-- Retirada dos formandos;
-- Retirada dos alunos que chegaram ao tnc e não atingiram 50% do CHT;
-- Retirada dos alunos que chegaram ao NTOTPER e não atingiram 100% do CHT.
-
 Bugs:
 - Caso 3B da remoção
