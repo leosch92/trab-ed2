@@ -34,19 +34,19 @@ TABM *inicializa(void){
     return NULL;
 }
 
-TABM *libera(TABM *a){
+void libera(TABM *a){
     if(a){
-    if(!a->folha){
-      int i;
-      for(i = 0; i <= a->nchaves; i++) libera(a->filho[i]);
+        if(!a->folha){
+            int i;
+            for(i = 0; i <= a->nchaves; i++) libera(a->filho[i]);
+        }
+        else{
+            int i;
+            for(i = 0; i < a->nchaves; i++) free(a->aluno[i]);
+        }
+        free(a->chave);
     }
-    free(a->chave);
-    free(a->filho);
-    free(a->aluno);
-    free(a->prox);
-    free(a);
-    return NULL;
-    }
+    return;
 }
 
 TABM *busca(TABM *a, int mat){
@@ -274,12 +274,25 @@ void altera_aluno(TABM* arv, int m, void* nova_info, int t, int num_opalt){
     return;
 }
 
-void retiraAux(TABM* arv, int mat, int t){
+void copiaUm(TABM* arv, TABM* andar){
+    arv->nchaves = andar->nchaves;
+    int c;
+    for(c=0;c<arv->nchaves;c++){
+        arv->chave[c] = andar->chave[c];
+        arv->aluno[c] = andar->aluno[c];
+        arv->filho[c] = NULL;
+    }
+    arv->folha = 1;
+    arv->filho[c] = NULL;
+}
+
+void retiraAux(TABM* arv, int mat, int t, int imprime){
     int i;
     for(i = 0; i<arv->nchaves && arv->chave[i] <= mat; i++);  //Encontra primeiro i maior que chave
     if(arv->folha){         //Achou elemento, já garantido que existe por retira()
-        printf("Caso 1\n");
+        if(imprime)printf("Caso 1\n");
         i--;
+        printf("%d\n",mat);
         int j;
         for(j=i;j<arv->nchaves-1;j++){
             arv->chave[j] = arv->chave[j+1];
@@ -288,12 +301,13 @@ void retiraAux(TABM* arv, int mat, int t){
         return;
     }
     else{
+        TABM* filhoSuc = NULL, * filhoAnt = NULL;
         TABM * filhoCand = arv->filho[i];
         if(filhoCand->nchaves < t){                         //Filho candidato tem t-1 chaves
             if(i != arv->nchaves){                           //Filho i não é o último
-                TABM* filhoSuc = arv->filho[i+1];
+                filhoSuc = arv->filho[i+1];
                 if(filhoSuc && filhoSuc->nchaves>= t){          //Tem filho sucessor que pode ceder um elemento
-                    printf("Caso 3A\n");
+                    if(imprime)printf("Caso 3A\n");
                     if(filhoSuc->folha){                        //Esse filho é folha
                         //Coloca primeiro elemento do Sucessor no candidato
                         arv->chave[i] = filhoSuc->chave[1];
@@ -322,16 +336,18 @@ void retiraAux(TABM* arv, int mat, int t){
                             filhoSuc->chave[c] = filhoSuc->chave[c+1];
                             filhoSuc->filho[c] = filhoSuc->filho[c+1];
                         }
+                        filhoSuc->filho[c] = filhoSuc->filho[c+1];
                         filhoSuc->nchaves--;
                     }
-                    retiraAux(filhoCand,mat,t);
+                    retiraAux(filhoCand,mat,t,imprime);
                     return;
+
                 }
             }
             else if(i!= 0){                                //Filho i não é o primeiro
-                TABM* filhoAnt = arv->filho[i-1];
+                filhoAnt = arv->filho[i-1];
                 if(filhoAnt && filhoAnt->nchaves>= t){     //Tem filho antecessor que pode ceder um elemento
-                    printf("Caso 3A\n");
+                    if(imprime)printf("Caso 3A\n");
                     if(filhoAnt->folha){
                         //Joga todas infos do filho candidato pra frente
                         int c;
@@ -350,7 +366,7 @@ void retiraAux(TABM* arv, int mat, int t){
                     else{
                         //Joga todas infos do filho candidato pra frente
                         int c;
-                        for(c=filhoCand->nchaves;c!=0;c--){
+                        for(c=filhoCand->nchaves;c>=0;c--){
                             filhoCand->chave[c+1] = filhoCand->chave[c];
                             filhoCand->aluno[c+1] = filhoCand->aluno[c];
                         }
@@ -361,25 +377,110 @@ void retiraAux(TABM* arv, int mat, int t){
                         arv->chave[i] = filhoAnt->chave[filhoAnt->nchaves-1];
                         filhoCand->filho[0] = filhoAnt->filho[filhoAnt->nchaves];
                         filhoAnt->nchaves--;
+
                     }
-                    retiraAux(filhoCand,mat,t);
+                    retiraAux(filhoCand,mat,t,imprime);
+                    return;
+
+                }
+            }
+            if(imprime)printf("Caso 3B\n");
+            if(filhoSuc){       //Existe filho sucessor, junção com ele
+                if(filhoCand->folha){
+                    //Caso 3B com Filho Sucessor, ambos folha
+                    filhoCand->nchaves = 2*t-2 ;
+                    int c;
+                    for(c=0;c<filhoSuc->nchaves;c++){
+                        filhoCand->chave[c+t-1] = filhoSuc->chave[c];
+                        filhoCand->aluno[c+t-1] = filhoSuc->aluno[c];
+                    }
+                    if(arv->nchaves==1){
+                        copiaUm(arv,filhoCand);
+                        retiraAux(arv,mat,t,imprime);
+                        return;
+                    }
+                    for(c=i+1;c<arv->nchaves;c++){
+                        arv->chave[c-1] = arv->chave[c];
+                        arv->filho[c] = arv->filho[c+1];
+                    }
+                    arv->nchaves--;
+                    retiraAux(filhoCand,mat,t,imprime);
+                    return;
+                }
+                else{
+                    int c;
+                    filhoCand->nchaves = 2*t-1 ;               //Pai vai ficar com 2t-1 chaves
+                    filhoCand->chave[t-1] = arv->chave[i];
+                    for(c=t;c<2*t-1;c++){
+                        filhoCand->chave[c] = filhoSuc->chave[c-t];
+                        filhoCand->filho[c] = filhoSuc->filho[c-t];
+                    }
+                    filhoCand->filho[c] = filhoSuc->filho[c-t];
+                    for(c=i+1;c<arv->nchaves;c++){
+                        arv->chave[c-1] = arv->chave[c];
+                        arv->filho[c] = arv->filho[c+1];
+                    }
+                    arv->nchaves--;
+                    arv->filho[i] = filhoCand;
+                    retiraAux(filhoCand,mat,t,imprime);
                     return;
                 }
             }
-            printf("Caso 3B\n");
-                //Fazer caso 3B
+            else{
+               //Não existe filho sucessor, junção será com antecessor
+                if(filhoCand->folha){
+                    //Caso 3B com Filho Antecessor, ambos folha
 
-
+                    filhoAnt->nchaves = 2*t-2 ;
+                    int c;
+                    for(c=0;c<filhoAnt->nchaves;c++){
+                        filhoAnt->chave[c+t-1] = filhoCand->chave[c];
+                        filhoAnt->aluno[c+t-1] = filhoCand->aluno[c];
+                    }
+                    if(arv->nchaves==1){
+                        copiaUm(arv,filhoAnt);
+                        retiraAux(arv,mat,t,imprime);
+                        return;
+                    }
+                    for(c=i+1;c<arv->nchaves;c++){
+                        arv->chave[c-1] = arv->chave[c];
+                        arv->filho[c] = arv->filho[c+1];
+                    }
+                    arv->nchaves--;
+                    retiraAux(filhoAnt,mat,t,imprime);
+                    return;
+                }
+                else{
+                    int c;
+                    filhoAnt->nchaves = 2*t-1;               //Pai vai ficar com 2t-1 chaves
+                    if(i!=arv->nchaves) filhoAnt->chave[t-1] = arv->chave[i];
+                    else filhoAnt->chave[t-1] = arv->chave[i-1];
+                    for(c=t;c<2*t-1;c++){
+                        filhoAnt->chave[c] = filhoCand->chave[c-t];
+                        filhoAnt->filho[c] = filhoCand->filho[c-t];
+                    }
+                    filhoAnt->filho[c] = filhoCand->filho[c-t];
+                    for(c=i;c<arv->nchaves-1;c++){
+                        arv->chave[c-1] = arv->chave[c];
+                        arv->filho[c] = arv->filho[c+1];
+                    }
+                    arv->nchaves--;
+                    retiraAux(filhoAnt,mat,t,imprime);
+                    return;
+                }
+            }
         }
-
-        retiraAux(filhoCand,mat,t);
+        retiraAux(filhoCand,mat,t,imprime);
         return;
     }
 }
 
-void retira(TABM* arv, int mat, int t){
-    if(!arv || !busca(arv,mat)) return;
-    retiraAux(arv,mat,t);
+void retira(TABM* arv, int mat, int t,int imprime){
+    if(!busca(arv,mat)){
+        printf("Matricula nao encontrada\n");
+        return;
+    }
+    retiraAux(arv,mat,t,imprime);
 }
 
 int main(){
@@ -418,7 +519,7 @@ int main(){
             printf("Insira a matricula do aluno a ser removido:\n");
             int mat_removida;
             scanf("%d", &mat_removida);
-            retira(arvore, mat_removida, t);
+            retira(arvore, mat_removida, t, 1); //Se 1, imprime os casos, 0 para não imprimir
             imprime(arvore, 0);
         }
         else if (num_op == 6){
