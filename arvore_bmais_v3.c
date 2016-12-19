@@ -17,6 +17,11 @@ typedef struct aluno{
     char nome[31];
 }TAL;
 
+typedef struct lista{
+    int info;
+    struct lista* prox;
+}TLista;
+
 TABM *cria(int t){
     TABM* novo = (TABM*)malloc(sizeof(TABM));
     novo->nchaves = 0;
@@ -483,6 +488,85 @@ void retira(TABM* arv, int mat, int t,int imprime){
     retiraAux(arv,mat,t,imprime);
 }
 
+TLista* insere_inicio(TLista* l, int info){
+    TLista* novo = (TLista*) malloc(sizeof(TLista));
+    novo->info = info;
+    novo->prox = l;
+    return novo;
+}
+
+TLista* remove_prim(TLista* l, int* info){
+    if(!l) return;
+    info = l->info;
+    TLista* aux = l;
+    aux = aux->prox;
+    free(l);
+    return aux;
+}
+
+void remove_regra_cinquenta(TABM* arv, int t){
+    if (!arv) return;
+    TABM* a = arv;
+    while(!a->folha) a = a->filho[0];
+    int i;
+    TLista *l = NULL;
+    while(a){
+        for(i = 0; i < a->nchaves; i++){
+            if(a->aluno[i]->npu > (a->aluno[i]->ntotper)/2){
+                if(a->aluno[i]->chcs < (a->aluno[i]->cht / 2)){
+                    l = insere_inicio(l, a->aluno[i]->mat);
+                }
+            }
+        }
+        a = a->prox;
+    }
+    int aux;
+    while(l){
+        l = remove_prim(l, &aux);
+        retira(arv, aux, t, 0);
+    }
+}
+
+void remove_formandos(TABM* arv, int t){
+    TABM* a = arv;
+    while(!a->folha) a = a->filho[0];
+    int i;
+    TLista *l = NULL;
+    while(a){
+        for(i = 0; i < a->nchaves; i++){
+            if(a->aluno[i]->chcs == a->aluno[i]->cht)
+                l = insere_inicio(l, a->aluno[i]->mat);
+        }
+        a = a->prox;
+    }
+    int aux;
+    while(l){
+        l = remove_prim(l, &aux);
+        retira(arv, aux, t, 0);
+    }
+}
+
+void remove_regra_maximo(TABM* arv, int t){
+    if (!arv) return;
+    TABM* a = arv;
+    while(!a->folha) a = a->filho[0];
+    int i;
+    TLista *l = NULL;
+    while(a){
+        for(i = 0; i < a->nchaves; i++){
+            if(a->aluno[i]->npu > a->aluno[i]->ntotper)
+                l = insere_inicio(l, a->aluno[i]->mat);
+        }
+        a = a->prox;
+    }
+    int aux;
+    while(l){
+        l = remove_prim(l, &aux);
+        retira(arv, aux, t, 0);
+    }
+}
+
+
 int main(){
     TABM *arvore = inicializa();
     printf("Bem vinda, Rosseti! Digite a operacao que deseja realizar:\n");
@@ -556,15 +640,15 @@ int main(){
             }
         }
         else if (num_op == 7){
-            //remove_formandos(arvore, t);
+            remove_formandos(arvore, t);
             imprime(arvore, 0);
         }
         else if (num_op == 8){
-            //remove_regra_cinquenta(arvore, t);
+            remove_regra_cinquenta(arvore, t);
             imprime(arvore, 0);
         }
         else if (num_op == 9){
-            //remove_regra_maximo(arvore, t);
+            remove_regra_maximo(arvore, t);
             imprime(arvore, 0);
         }
         else if (num_op == 11){
